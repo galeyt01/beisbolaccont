@@ -1,6 +1,6 @@
 // Configuración obligatoria para la API de Telegram (Rúbrica Nivel Experto)
 const TELEGRAM_TOKEN = '8896248921:AAHFxQY_oMQNu5C8SfWEe9OaTxWyu46Wyhk'; // Pega aquí el Token largo que te dio BotFather
-const TELEGRAM_CHAT_ID = '6224480790';         // Pega aquí el número que te dio el bot de Chat ID
+const TELEGRAM_CHAT_ID = '6224480790';         // Pega aquí el número de tu Chat ID
 
 let carrito = [];
 
@@ -21,7 +21,6 @@ function enviarNotificacionTelegram(mensaje) {
         parse_mode: 'Markdown'
     };
 
-    // Petición asíncrona a la API
     fetch(url, {
         method: 'POST',
         headers: {
@@ -31,23 +30,27 @@ function enviarNotificacionTelegram(mensaje) {
     })
     .then(response => response.json())
     .then(result => {
-        console.log('Notificación enviada con éxito a Telegram:', result);
+        console.log('Notificación enviada a Telegram:', result);
     })
     .catch(error => {
-        console.error('Error al enviar notificación a la API de Telegram:', error);
+        console.error('Error en la API de Telegram:', error);
     });
 }
 
-// Abrir/Cerrar Ventana del Carrito
-btnVerCarrito.addEventListener('click', (e) => {
-    e.preventDefault();
-    mostrarCarrito();
-    modal.style.display = 'block';
-});
+// Abrir y Cerrar Ventana del Carrito al dar clic en el menú
+if (btnVerCarrito) {
+    btnVerCarrito.addEventListener('click', (e) => {
+        e.preventDefault();
+        mostrarCarrito();
+        modal.style.display = 'block';
+    });
+}
 
-btnCerrarModal.addEventListener('click', () => {
-    modal.style.display = 'none';
-});
+if (btnCerrarModal) {
+    btnCerrarModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+}
 
 window.addEventListener('click', (e) => {
     if (e.target === modal) {
@@ -55,32 +58,37 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Registrar eventos al cargar la página
+// Registrar eventos de los 30 botones "Agregar al Carrito"
 document.addEventListener('DOMContentLoaded', () => {
     const botones = document.querySelectorAll('.btn-add');
+    
     botones.forEach(boton => {
         boton.addEventListener('click', (e) => {
             const card = e.target.closest('.producto-card');
             const nombre = card.querySelector('h3').innerText;
             const precioTexto = card.querySelector('.precio').innerText;
             
+            // Convertir "$5,899 MXN" a número puro (5899)
             const precioNumero = parseInt(precioTexto.replace(/[^0-9]/g, ''));
 
+            // Guardar en el arreglo
             carrito.push({ nombre, precio: precioNumero });
+            
+            // Actualizar el número del Header
             actualizarHeader();
             
-            // Notificación automática al agregar producto
+            // Lógica interactiva: Mandar alerta al Telegram del Admin
             const alertaMensaje = `🛒 *Nueva actividad en la tienda:*\nUn usuario agregó: _${nombre}_ a su carrito.\nPrecio: ${precioTexto}`;
             enviarNotificacionTelegram(alertaMensaje);
 
-            alert(`⚾ ${nombre} agregado.`);
+            alert(`⚾ ${nombre} agregado al carrito.`);
         });
     });
 
-    // Configurar el botón de proceder al pago para que envíe el reporte de compra completo
+    // Configurar el botón "Proceder al Pago" dentro del modal
     const btnCheckout = document.querySelector('.btn-checkout');
     if (btnCheckout) {
-        btnCheckout.removeAttribute('onclick'); // Limpiamos el alert básico antiguo
+        btnCheckout.removeAttribute('onclick'); // Quitamos el alert viejo
         btnCheckout.addEventListener('click', () => {
             if (carrito.length === 0) {
                 alert('El carrito está vacío, bro.');
@@ -95,12 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 totalAcumulado += prod.precio;
             });
 
-            const mensajeCompra = `🔥 *¡NUEVA INTENCIÓN DE COMPRA!* 🔥\n\n*Productos seleccionados:*\n${reporteProductos}\n*Total General:* $${totalAcumulado.toLocaleString()} MXN\n\n⚡ _Notificación generada automáticamente desde el código del catálogo._`;
+            const mensajeCompra = `🔥 *¡NUEVA INTENCIÓN DE COMPRA!* 🔥\n\n*Productos seleccionados:*\n${reporteProductos}\n*Total General:* $${totalAcumulado.toLocaleString()} MXN\n\n⚡ _Notificación generada automáticamente desde el código._`;
             
-            // Envía todo el desglose a tu Telegram
+            // Envía el reporte final por API
             enviarNotificacionTelegram(mensajeCompra);
             
-            alert('¡Pedido procesado! Se ha enviado la notificación de uso al sistema.');
+            alert('¡Pedido procesado! Se ha notificado al sistema.');
             carrito = [];
             actualizarHeader();
             modal.style.display = 'none';
@@ -109,9 +117,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function actualizarHeader() {
-    btnVerCarrito.innerText = `Carrito (${carrito.length})`;
+    if (btnVerCarrito) {
+        btnVerCarrito.innerText = `Carrito (${carrito.length})`;
+    }
 }
 
+// ESTA FUNCIÓN METE LOS PRODUCTOS EN EL ELEMENTO DE TU IMAGEN (#carrito-items)
 function mostrarCarrito() {
     contenedorItems.innerHTML = '';
     
@@ -122,12 +133,15 @@ function mostrarCarrito() {
     }
 
     let totalAcumulado = 0;
+    
     carrito.forEach((producto) => {
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('item-carrito');
         itemDiv.innerHTML = `
-            <span>${producto.nombre}</span>
-            <strong>$${producto.precio.toLocaleString()} MXN</strong>
+            <div style="display: flex; justify-content: space-between; width: 100%; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                <span>${producto.nombre}</span>
+                <strong>$${producto.precio.toLocaleString()} MXN</strong>
+            </div>
         `;
         contenedorItems.appendChild(itemDiv);
         totalAcumulado += producto.precio;
