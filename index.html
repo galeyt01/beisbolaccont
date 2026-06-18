@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beisbolmania | Oficial Pro Shop</title>
     <style>
-        /* --- ESTILOS GENERALES Y BASE --- */
+        /* --- ESTILOS GENERALES --- */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -62,11 +62,6 @@
             color: #fff;
             padding: 80px 20px;
             text-align: center;
-            transition: background 0.3s;
-        }
-
-        .hero.drops-theme {
-            background: linear-gradient(135px, #0f1c2e 0%, #1f3a60 100%);
         }
 
         .hero-content h1 {
@@ -267,10 +262,9 @@
     </header>
 
     <!-- Hero Dinámico -->
-    <section class="hero id="hero-banner" class="hero drops-theme">
+    <section class="hero" id="hero-banner">
         <div class="hero-content" id="hero-text">
-            <h1>PRÓXIMOS DROPS EXCLUSIVOS 2027</h1>
-            <p>LO MÁS EXCLUSIVO DE LA MLB ANTES QUE NADIE. EDICIONES ULTRA LIMITADAS.</p>
+            <!-- Se inyecta dinámicamente con JavaScript -->
         </div>
     </section>
 
@@ -306,13 +300,15 @@
         const CHAT_ID = 'TU_CHAT_ID';
         // ========================================================
 
-        // BASE DE DATOS COMPLETA (30 Productos + 3 Drops Especiales)
-        const baseDatos = {
-            drops: [
-                { id: 'd1', marca: 'Rawlings x Gold Glove', nombre: 'Rev1X Gold Edition 11.5"', estreno: 'Enero 2027', imagen: 'https://tse1.mm.bing.net/th/id/OIP.R5h9dl7SgwHY6EZQvlw4bAHaI5?r=0&rs=1&pid=ImgDetMain' },
-                { id: 'd2', marca: 'Louisville Slugger', nombre: 'Meta BBCOR Matte Black (-3)', estreno: 'Marzo 2027', imagen: 'https://tse2.mm.bing.net/th/id/OIP.bqZz4VKbhcOKP1mHFjbfEgHaHa?r=0&w=1200&h=1200&rs=1&pid=ImgDetMain' },
-                { id: 'd3', marca: 'Rawlings Chrome', nombre: 'Mach Alpha Platinum Grip', estreno: 'Mayo 2027', imagen: 'https://www.baseballmonkey.com/media/catalog/product/cache/5ef57709e05171d131a9de884891aa4a/8/3/83321769153-c_5.jpg' }
-            ],
+        // 1. BASE DE DATOS EXCLUSIVA DE PROXIMOS DROPS (Sin precio, Estreno 2027)
+        const listaDrops = [
+            { id: 'd1', marca: 'Rawlings x Gold Glove', nombre: 'Rev1X Gold Edition 11.5"', estreno: 'Enero 2027', imagen: 'https://tse1.mm.bing.net/th/id/OIP.R5h9dl7SgwHY6EZQvlw4bAHaI5?r=0&rs=1&pid=ImgDetMain' },
+            { id: 'd2', marca: 'Louisville Slugger', nombre: 'Meta BBCOR Matte Black (-3)', estreno: 'Marzo 2027', imagen: 'https://tse2.mm.bing.net/th/id/OIP.bqZz4VKbhcOKP1mHFjbfEgHaHa?r=0&w=1200&h=1200&rs=1&pid=ImgDetMain' },
+            { id: 'd3', marca: 'Rawlings Chrome', nombre: 'Mach Alpha Platinum Grip', estreno: 'Mayo 2027', imagen: 'https://www.baseballmonkey.com/media/catalog/product/cache/5ef57709e05171d131a9de884891aa4a/8/3/83321769153-c_5.jpg' }
+        ];
+
+        // 2. BASE DE DATOS DE PRODUCTOS COMERCIALES (30 Artículos)
+        const productosComerciales = {
             guantes: [
                 { id: 1, badge: 'Pro Axle', marca: 'Rawlings', nombre: 'Pro Preferred R2G 11.5"', precio: 5899, imagen: 'https://th.bing.com/th/id/R.b498d87fbff724580a18c7c9cea6d033?rik=LlZN1n263AYHkA&riu=http%3a%2f%2fbeisbolmania.mx%2fcdn%2fshop%2ffiles%2fBEISBOLANIGuanteBeisbolRawlings_0011_Capa19_1200x1200.jpg%3fv%3d1756919602&ehk=sVs9oMvZNGcCpqH9z6ZySHfyph%2fmx4VCwdeLiZh8Nio%3d&risl=&pid=ImgRaw&r=0' },
                 { id: 2, badge: '', marca: 'Rawlings', nombre: 'Heart of the Hide 11.75"', precio: 5299, imagen: 'https://sportszona.com/cdn/shop/products/guante-beisbol-rawlings-pro-2r-1125-azul-mano-izquierda-sports-zona-839493_1800x1800.jpg?v=1656958304' },
@@ -333,7 +329,7 @@
                 { id: 15, badge: 'Edición Corp', marca: 'Louisville Slugger', nombre: 'Omaha USSSA Baseball', precio: 4350, imagen: 'https://tse4.mm.bing.net/th/id/OIP.aSaqmCvn9yi8o_P6mV-KzgHaHM?r=0&rs=1&pid=ImgDetMain&o=7&rm=3' },
                 { id: 16, badge: '', marca: 'Louisville Slugger', nombre: 'Atlas BBCOR One-Piece', precio: 8200, imagen: 'https://tse1.mm.bing.net/th/id/OIP._XwYCHUqigJP1_QHKdiFRAHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3' },
                 { id: 17, badge: '', marca: 'Louisville Slugger', nombre: 'Prime Wood DJ2 Target', precio: 3600, imagen: 'https://tse3.mm.bing.net/th/id/OIP.c-gwTOWcMVzI0_3y3lRy-QHaHa?r=0&rs=1&pid=ImgDetMain&o=7&rm=3' },
-                { id: 18, badge: '', marca: 'Louisville Slugger', nombre: 'Vapor USA Youth (-10)', precio: 1899, imagen: 'https://tse2.mm.bing.net/th/id/OIP.oQ2dPuR9a5P_2hdbwFUHxAHaHL?r=0&rs=1&pid=ImgDetMain&o=7&rm=3' },
+                { id: 18, badge: '', marca: 'Louisville Slugger', font: 'Vapor USA Youth (-10)', nombre: 'Vapor USA Youth (-10)', precio: 1899, imagen: 'https://tse2.mm.bing.net/th/id/OIP.oQ2dPuR9a5P_2hdbwFUHxAHaHL?r=0&rs=1&pid=ImgDetMain&o=7&rm=3' },
                 { id: 19, badge: 'Funko Pop', marca: 'Louisville Slugger', nombre: 'Bate de Práctica Fungo', precio: 1550, imagen: 'https://tse1.mm.bing.net/th/id/OIP.Ixdlpbzmgh9l8prJ28tKRwAAAA?r=0&w=386&h=386&rs=1&pid=ImgDetMain&o=7&rm=3' },
                 { id: 20, badge: '', marca: 'Louisville Slugger', nombre: 'MLB Prime Ash Mix', precio: 3100, imagen: 'https://tse4.mm.bing.net/th/id/OIP.ZxaERFQJ74hl0CWIWHd1bQHaGo?r=0&rs=1&pid=ImgDetMain&o=7&rm=3' }
             ],
@@ -351,59 +347,58 @@
             ]
         };
 
-        // Estado Global del Carrito
+        // Estado del Carrito en memoria local
         let carrito = JSON.parse(localStorage.getItem('cart_beisbol')) || [];
 
-        // Sistema de Enrutamiento (Navegación Interna SPA)
+        // ENRUTADOR DINÁMICO SPA
         function navegar(seccion) {
-            // Actualizar menú activo
+            // Actualizar clase activa del menú
             document.querySelectorAll('#main-nav a').forEach(a => a.classList.remove('active'));
             const activeNav = document.getElementById(`nav-${seccion}`);
             if(activeNav) activeNav.classList.add('active');
 
             const grid = document.getElementById('grid-dinamico');
             const titulo = document.getElementById('seccion-titulo');
-            const hero = document.getElementById('hero-banner');
             const heroText = document.getElementById('hero-text');
 
             grid.innerHTML = '';
 
             if (seccion === 'drops') {
-                // Configurar Interfaz de Drops
-                titulo.innerText = "Calendario de Lanzamientos Exclusivos";
-                heroText.innerHTML = `<h1>PRÓXIMOS DROPS EXCLUSIVOS 2027</h1><p>LO MÁS EXCLUSIVO DE LA MLB ANTES QUE NADIE. EDICIONES ULTRA LIMITADAS.</p>`;
+                // RENDERIZAR SECCIÓN EXCLUSIVA DE LANZAMIENTOS (Separado de los Catálogos Comerciales)
+                titulo.innerText = "Calendario de Drops Exclusivos";
+                heroText.innerHTML = `<h1>PRÓXIMOS DROPS 2027</h1><p>RESERVA LAS FECHAS. EDICIONES LIMITADAS DE COLECCIÓN SIN PRECIO DE SALIDA COMERCIAL.</p>`;
                 
-                baseDatos.drops.forEach(prod => {
+                listaDrops.forEach(prod => {
                     const card = document.createElement('div');
                     card.className = 'producto-card';
                     card.innerHTML = `
-                        <div class="badge drop-badge">ESTRENO 2027</div>
+                        <div class="badge drop-badge">DROP 2027</div>
                         <img src="${prod.imagen}" alt="${prod.nombre}" loading="lazy">
                         <div class="producto-info">
                             <div>
                                 <span class="marca">${prod.marca}</span>
                                 <h3>${prod.nombre}</h3>
                             </div>
-                            <p class="precio" style="color: #d4af37; margin-top:10px;">Lanzamiento: ${prod.estreno}</p>
-                            <button class="btn-drop-notify" onclick="alert('¡Te avisaremos en cuanto se libere en 2027!')">Notificarme</button>
+                            <p class="precio" style="color: #d4af37; margin-top:15px; font-size:14px;">Estreno Oficial: ${prod.estreno}</p>
+                            <button class="btn-drop-notify" onclick="alert('¡Excelente! Te notificaremos en tu correo/móvil en cuanto este drop de 2027 esté disponible.')">Notificarme</button>
                         </div>
                     `;
                     grid.appendChild(card);
                 });
             } else {
-                // Configurar Interfaz de Productos de Venta Directa
+                // RENDERIZAR SECCIONES DE PRODUCTOS COMERCIALES CON PRECIO Y CARRITO
                 if (seccion === 'guantes') {
                     titulo.innerText = "Guantes Rawlings Pro";
-                    heroText.innerHTML = `<h1>DOMINA EL DIAMANTE</h1><p>SIÉNTETE COMO UN JUGADOR DE LA MLB CON NUESTROS GUANTES DE ÉLITE.</p>`;
+                    heroText.innerHTML = `<h1>DOMINA EL DIAMANTE</h1><p>SIÉNTETE JUGADOR DE GRANDES LIGAS CON NUESTRA EQUIPACIÓN DE ÉLITE.</p>`;
                 } else if (seccion === 'bates') {
                     titulo.innerText = "Bates Louisville Slugger";
-                    heroText.innerHTML = `<h1>CONECTA CON PODER</h1><p>MÁXIMA VELOCIDAD DE SWING Y DURABILIDAD EN MADERA Y ALUMINIO.</p>`;
+                    heroText.innerHTML = `<h1>CONECTA CON PODER</h1><p>MÁXIMA VELOCIDAD DE SWING Y RESISTENCIA EN CADA TURNO AL BATE.</p>`;
                 } else if (seccion === 'guanteletas') {
                     titulo.innerText = "Guanteletas Premium";
-                    heroText.innerHTML = `<h1>AGARRE PERFECTO</h1><p>MÁXIMO CONTROL Y PROTECCIÓN EN CADA TURNO AL BATE.</p>`;
+                    heroText.innerHTML = `<h1>AGARRE PERFECTO</h1><p>MÁXIMO CONTROL, CONFORT Y PROTECCIÓN EN TUS MANOS.</p>`;
                 }
 
-                baseDatos[seccion].forEach(prod => {
+                productosComerciales[seccion].forEach(prod => {
                     const card = document.createElement('div');
                     card.className = 'producto-card';
                     let badgeHTML = prod.badge ? `<div class="badge">${prod.badge}</div>` : '';
@@ -425,9 +420,9 @@
             }
         }
 
-        // CONTROL DEL CARRITO
+        // CONTROL DEL CARRITO (Solo productos con valor comercial)
         function agregarAlCarrito(id, seccion) {
-            const seleccionado = baseDatos[seccion].find(p => p.id === id);
+            const seleccionado = productosComerciales[seccion].find(p => p.id === id);
             const existe = carrito.find(item => item.id === id);
 
             if (existe) {
@@ -502,7 +497,7 @@
             modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        // ENVÍO DE CHECKOUT A TELEGRAM
+        // PROCESAR COMPRA HACIA EL BOT DE TELEGRAM
         function procesarCompra() {
             if (carrito.length === 0) {
                 alert("Tu carrito está vacío.");
@@ -536,19 +531,19 @@
                     actualizarCarrito();
                     toggleCarrito();
                 } else {
-                    alert("Error en el envío. Revisa tus credenciales de bot en el código.");
+                    alert("Error de credenciales. Asegúrate de configurar TELEGRAM_TOKEN y CHAT_ID.");
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert("Hubo un fallo de red al conectar con Telegram.");
+                alert("Error de conexión de red.");
             });
         }
 
-        // CARGA INICIAL
+        // DISPARADOR INICIAL
         document.addEventListener('DOMContentLoaded', () => {
             actualizarCarrito();
-            navegar('drops'); // Carga la de Lanzamientos por defecto al abrir
+            navegar('drops'); // Carga la pestaña de drops al abrir el sitio
         });
     </script>
 </body>
