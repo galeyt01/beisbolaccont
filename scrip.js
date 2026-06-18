@@ -1,6 +1,6 @@
 // Configuración obligatoria para la API de Telegram (Rúbrica Nivel Experto)
-const TELEGRAM_TOKEN = '8896248921:AAHFxQY_oMQNu5C8SfWEe9OaTxWyu46Wyhk'; // Pega aquí el Token largo que te dio BotFather
-const TELEGRAM_CHAT_ID = '6224480790';         // Pega aquí el número que te dio el bot de Chat ID
+const TELEGRAM_TOKEN = '8763741884:AAEbBiG2bdJ7pUgyduQ-wtJhg8HPb_A5EsQ'; // Pega aquí el Token largo que te dio BotFather
+const TELEGRAM_CHAT_ID = '6983466823';         // Pega aquí el número que te dio el bot de Chat ID
 
 let carrito = [];
 
